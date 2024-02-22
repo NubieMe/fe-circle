@@ -11,11 +11,14 @@ import { FaSearch, FaHeart, FaPencilAlt } from "react-icons/fa";
 import { AiFillHome, AiOutlineHome } from "react-icons/ai";
 import { HiMagnifyingGlass, HiOutlineUser, HiUserCircle } from "react-icons/hi2";
 import { CiHeart } from "react-icons/ci";
+import { useSelector } from "react-redux";
+import { RootState } from "../stores/store";
 
 const LeftSidebar = (props: navbar) => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const token = document.cookie.replace("C.id=", "");
+    const user = useSelector((state: RootState) => state.user.username);
 
     function logout() {
         axios.delete("/logout");
@@ -122,7 +125,7 @@ const LeftSidebar = (props: navbar) => {
                     </Link>
                 </Box>
                 <Box>
-                    <Link display="flex" onClick={() => navigate("/profile")} gap="3">
+                    <Link display="flex" onClick={() => navigate(`/${user}`)} gap="3">
                         {!props.profile ? (
                             <>
                                 <HiOutlineUser size={30} color={text.primary} />

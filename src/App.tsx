@@ -4,11 +4,10 @@ import { ChakraProvider } from "@chakra-ui/react";
 import Thread from "./pages/Thread";
 import { extendTheme } from "@chakra-ui/react";
 import Follows from "./pages/Follows";
-import Login from "./components/Login";
-import Register from "./components/Register";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
 import Search from "./pages/Search";
-import Profile from "./components/UserProfile";
-import Main from "./components/Main";
+import Profile from "./pages/Profile";
 
 const theme = extendTheme({
     styles: {
