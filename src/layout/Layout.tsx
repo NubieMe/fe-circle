@@ -30,7 +30,7 @@ export const Layout = ({ children, home, search, follows, profile }: Props) => {
                 <Flex w={"100%"} h={"auto"}>
                     <Box w={{ base: "100%", md: "100%", lg: "100%", xl: "65%" }}>{children}</Box>
                     <Box w={{ base: "0px", md: "0px", lg: "40%", xl: "35%" }} overflow={"hidden"}>
-                        <RightSidebar />
+                        <RightSidebar profile={profile} />
                     </Box>
                 </Flex>
             </Flex>

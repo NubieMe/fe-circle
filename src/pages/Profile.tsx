@@ -1,5 +1,5 @@
 import { Layout } from "../layout/Layout";
-import UserProfile from "../components/UserProfile";
+import UserProfile from "../features/profile/components/UserProfile";
 
 const Profile = () => {
     return (

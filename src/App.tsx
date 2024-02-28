@@ -31,7 +31,7 @@ function IsLogin() {
 
 function IsNotLogin() {
     const token = document.cookie.replace("C.id=", "");
-    if (token) {
+    if (!token) {
         return <Navigate to={"/"} />;
     }
 

@@ -4,7 +4,6 @@ import { useDispatch } from "react-redux";
 import { updateModal } from "../stores/slices/modal";
 import { useNavigate } from "react-router-dom";
 import axios from "../libs/api";
-import { navbar } from "../types/navbar";
 import PostModal from "./PostModal";
 import { TbLogin, TbLogout } from "react-icons/tb";
 import { FaSearch, FaHeart, FaPencilAlt } from "react-icons/fa";
@@ -13,6 +12,13 @@ import { HiMagnifyingGlass, HiOutlineUser, HiUserCircle } from "react-icons/hi2"
 import { CiHeart } from "react-icons/ci";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/store";
+
+interface navbar {
+    home?: boolean;
+    search?: boolean;
+    follows?: boolean;
+    profile?: boolean;
+}
 
 const LeftSidebar = (props: navbar) => {
     const dispatch = useDispatch();
@@ -30,12 +36,18 @@ const LeftSidebar = (props: navbar) => {
         <Flex h={"100%"} w={"100%"} direction="column" ps={3} pe={4} pt={3} borderRight={"1px"}>
             <Card gap="5" bg={bg.primary}>
                 <HStack>
-                    <Heading as="h3" fontSize={{ base: "0px", lg: "40px" }} color={text.active}>
-                        circle
-                    </Heading>
-                    <Heading fontSize={{ base: "3xl", lg: "0px" }} textAlign={"left"} ml={"-5px"} color={text.active}>
-                        C
-                    </Heading>
+                    <Link onClick={() => navigate("/")}>
+                        <Heading as="h3" fontSize={{ base: "0px", lg: "40px" }} color={text.active}>
+                            circle
+                        </Heading>
+                        <Heading
+                            fontSize={{ base: "3xl", lg: "0px" }}
+                            textAlign={"left"}
+                            ml={"-5px"}
+                            color={text.active}>
+                            C
+                        </Heading>
+                    </Link>
                 </HStack>
                 <Box>
                     <Link display="flex" onClick={() => navigate("/")} gap="3">
@@ -160,7 +172,8 @@ const LeftSidebar = (props: navbar) => {
                         bg={"green"}
                         display={{ base: "none", lg: "inline-block" }}
                         color={text.primary}
-                        borderRadius={20}>
+                        borderRadius={20}
+                        _hover={{ bg: "green.500" }}>
                         Create Post
                     </Button>
                     <Text display={{ base: "inline-block", lg: "none" }} bg={text.active} mt={1}>

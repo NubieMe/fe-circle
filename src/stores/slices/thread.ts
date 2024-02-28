@@ -1,38 +1,40 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import api from "../../libs/api";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { Thread } from "../../types/thread";
+import { createSlice } from "@reduxjs/toolkit";
+import { DetailThread } from "../../types/thread";
 
-const initialState: Thread[] = [];
+const initialState: DetailThread = {
+    id: 0,
+    content: "",
+    image: [],
+    likes: [],
+    isLiked: false,
+    replies: [],
+    created_at: "",
+    updated_at: "",
+    author: {
+        id: 0,
+        name: "",
+        username: "",
+        picture: null,
+    },
+};
 
 const threadsSlice = createSlice({
-    name: "threads",
+    name: "thread",
     initialState,
     reducers: {
-        GET_THREADS: (_, action) => {
-            const threads: Thread[] = action.payload.map((data: Thread) => {
-                return {
-                    id: data.id,
-                    content: data.content,
-                    image: data.image,
-                    likes: data.likes,
-                    isLiked: data.isLiked,
-                    replies: data.replies,
-                    created_at: data.created_at,
-                    updated_at: data.updated_at,
-                    author: {
-                        id: data.author.id,
-                        name: data.author.name,
-                        username: data.author.username,
-                        picture: data.author.picture,
-                    },
-                };
-            });
-            return threads;
+        GET_THREAD: (state, action) => {
+            state.id = action.payload.id;
+            state.content = action.payload.content;
+            state.image = action.payload.image;
+            state.likes = action.payload.likes;
+            state.isLiked = action.payload.isLiked;
+            state.replies = action.payload.replies;
+            state.created_at = action.payload.created_at;
+            state.updated_at = action.payload.updated_at;
+            state.author = action.payload.author;
         },
     },
 });
 
-export const { GET_THREADS } = threadsSlice.actions;
+export const { GET_THREAD } = threadsSlice.actions;
 export default threadsSlice.reducer;

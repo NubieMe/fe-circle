@@ -2,9 +2,28 @@ export type Thread = {
     id: number;
     content: string;
     image: string[] | null;
-    likes: number;
+    likes: any[];
     isLiked: boolean;
-    replies: number;
+    replies: any[];
+    created_at: string;
+    updated_at: string;
+    author: {
+        id: number;
+        name: string;
+        username: string;
+        picture: string | null;
+    };
+    profile?: boolean;
+    username?: string;
+};
+
+export type DetailThread = {
+    id: number;
+    content: string;
+    image: string[] | null;
+    likes: any[];
+    isLiked: boolean;
+    replies: any[];
     created_at: string;
     updated_at: string;
     author: {
@@ -15,21 +34,15 @@ export type Thread = {
     };
 };
 
-export type DetailThread = {
-    id: number;
+export type postThread = {
     content: string;
-    image: string[] | null;
-    likes: number;
-    isLiked: boolean;
-    replies: Array<any>;
-    created_at: string;
-    updated_at: string;
-    author: {
-        id: number;
-        name: string;
-        username: string;
-        picture: string | null;
-    };
+    image: FileList | null | undefined;
+};
+
+export type replyThread = {
+    content: string;
+    image: File | null;
+    author: number;
 };
 
 export type Likes = {

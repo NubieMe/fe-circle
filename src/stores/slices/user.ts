@@ -9,8 +9,8 @@ const userSlice = createSlice({
         picture: null,
         cover: null,
         bio: null,
-        follower: [0],
-        following: [0],
+        follower: [{ id: 0, following: { id: 0 } }],
+        following: [{ id: 0, follower: { id: 0 } }],
     },
     reducers: {
         update: (state, action) => {

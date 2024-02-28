@@ -1,18 +1,20 @@
 import { Box, Button, Flex, HStack, Image, Text } from "@chakra-ui/react";
-import { bg, text } from "../styles/style";
-import { useDispatch, useSelector } from "react-redux";
+import { bg, text } from "../../../styles/style";
+import { useSelector } from "react-redux";
 import { useEffect } from "react";
-import axios from "../libs/api";
-import { updateUser } from "../stores/slices/user";
-import { RootState } from "../stores/store";
+import { RootState } from "../../../stores/store";
+import { useDispatch } from "react-redux";
+import { updateUser } from "../../../stores/slices/user";
+import api from "../../../libs/api";
+import { Right } from "../../../components/RightSidebar";
 
-const ProfileCard = () => {
-    const dispatch = useDispatch();
+const ProfileCard = ({ profile }: Right) => {
     const user = useSelector((state: RootState) => state.user);
     const token = document.cookie.replace("C.id=", "");
+    const dispatch = useDispatch();
 
     async function getCurrent() {
-        const res = await axios.get("/user/me/current", {
+        const res = await api.get("/user/me/current", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
@@ -26,6 +28,7 @@ const ProfileCard = () => {
     }, [token]);
 
     if (user.name === "") return null;
+    if (profile) return null;
     return (
         <Flex
             borderRadius="20px"
@@ -33,7 +36,7 @@ const ProfileCard = () => {
             px={"20px"}
             pt={"14px"}
             mb={"20px"}
-            h="345px"
+            h="310px"
             w={{ base: "0px", md: "100%", lg: "100%" }}
             mx={"auto"}
             mt={"20px"}
@@ -69,28 +72,37 @@ const ProfileCard = () => {
                         border={"1px solid #555"}
                         borderRadius={"40px"}
                         color={"white"}
-                        _hover={{ bg: "#38a169" }}>
+                        _hover={{ bg: "#555" }}>
                         Edit Profile
                     </Button>
                 </Box>
-                <Text fontWeight="600" color={text.primary} textAlign="left" mt={2} fontSize="xl">
+                <Text
+                    fontWeight="600"
+                    color={text.primary}
+                    bg={"none"}
+                    textAlign="left"
+                    mt={2}
+                    fontSize="xl"
+                    textTransform={"capitalize"}>
                     {user.name}
                 </Text>
-                <Text color={text.secondary} textAlign="left" fontSize="0.9rem" fontWeight="500">
+                <Text color={text.secondary} bg={"none"} textAlign="left" fontSize="0.9rem" fontWeight="500">
                     @{user.username}
                 </Text>
             </Flex>
-            <Box>
-                <Text color={"white"} fontSize={"0.9rem"}>
+            <Box bg={"none"}>
+                <Text color={"white"} bg={"none"} fontSize={"0.9rem"}>
                     {user.bio}
                 </Text>
-                <HStack spacing={1} fontSize={"0.8rem"} mt={1}>
-                    <Text color={text.primary}>{user.following.length}</Text>
-                    <Text>Following</Text>
-                    <Text color={text.primary} ml={4}>
+                <HStack bg={"none"} spacing={1} fontSize={"0.8rem"} mt={1}>
+                    <Text color={text.primary} bg={"none"}>
+                        {user.following.length}
+                    </Text>
+                    <Text bg={"none"}>Following</Text>
+                    <Text color={text.primary} bg={"none"} ml={4}>
                         {user.follower.length}
                     </Text>
-                    <Text>Followers</Text>
+                    <Text bg={"none"}>Followers</Text>
                 </HStack>
             </Box>
         </Flex>
