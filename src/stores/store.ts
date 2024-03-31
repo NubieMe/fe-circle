@@ -8,7 +8,11 @@ import threadReducer from "./slices/thread.ts";
 import loadingReducer from "./slices/loading.ts";
 import usersReducer from "./slices/users.ts";
 import profileReducer from "./slices/userProfile.ts";
-import suggestionReducer from "./slices/suggestion.ts";
+import followReducer from "./slices/follow.ts";
+import editReducer from "./slices/edit.ts";
+import tokenReducer from "./slices/token.ts";
+import coverReducer from "./slices/cover.ts";
+import pictureReducer from "./slices/picture.ts";
 
 export const store = configureStore({
     reducer: {
@@ -21,8 +25,13 @@ export const store = configureStore({
         upload: loadingReducer,
         users: usersReducer,
         profile: profileReducer,
-        suggestion: suggestionReducer,
+        follow: followReducer,
+        edit: editReducer,
+        token: tokenReducer,
+        cover: coverReducer,
+        picture: pictureReducer,
     },
 });
 
 export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;

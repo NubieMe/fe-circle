@@ -1,12 +1,9 @@
 import Main from "../components/Main";
-import { Layout } from "../layout/Layout";
 
 const Home = () => {
     return (
         <>
-            <Layout home>
-                <Main />
-            </Layout>
+            <Main />
         </>
     );
 };

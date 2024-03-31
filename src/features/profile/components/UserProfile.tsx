@@ -3,12 +3,21 @@ import { useEffect } from "react";
 import { useParams } from "react-router-dom";
 import { bg, text } from "../../../styles/style";
 import ThreadCard from "../../../components/ThreadCard";
-import { useSelector } from "react-redux";
-import { RootState } from "../../../stores/store";
 import { useProfile } from "../hooks/useProfile";
+import { useAppDispatch, useAppSelector } from "../../../stores/hooks";
+import { openEdit } from "../../../stores/slices/edit";
+import EditModal from "../../EditProfile/components/EditModal";
+import { RiImageEditFill } from "react-icons/ri";
+import { openCover } from "../../../stores/slices/cover";
+import CoverModal from "./CoverModal";
+import { openPicture } from "../../../stores/slices/picture";
+import PictureModal from "./PictureModal";
 
 export default function UserProfile() {
-    const user = useSelector((state: RootState) => state.profile);
+    const user = useAppSelector((state) => state.profile);
+    const userLogin = useAppSelector((state) => state.user);
+    console.log(userLogin.id);
+    const dispatch = useAppDispatch();
     const params = useParams();
     const username = params.username;
     const { getUser } = useProfile();
@@ -17,60 +26,119 @@ export default function UserProfile() {
         getUser(username!);
     }, []);
 
+    if (userLogin.id === 0) return null;
     return (
         <Flex direction={"column"} px={4}>
             <Flex
                 borderRadius="20px"
                 bg={bg.secondary}
-                px={"20px"}
-                py={"14px"}
+                p={"20px"}
+                // py={"14px"}
                 mb={"20px"}
-                h="345px"
+                h="315px"
                 w={{ base: "0px", md: "100%", lg: "100%" }}
                 mx={"auto"}
                 mt={"20px"}
                 direction="column"
                 color={"white"}>
-                <Text bg={"none"} textAlign={"left"} px={2} pb={2} fontWeight={600}>
-                    My Profile
-                </Text>
-
-                <Image
-                    src={!user?.cover ? "https://i.ibb.co/xmP2pS6/Profile.png" : user.cover}
-                    maxW="100%"
-                    borderRadius="20px"
-                />
-                <Flex bg={"none"} flexDirection="column" mb="10px">
+                <Box w="100%" h="140px" pos={"relative"} className="container">
                     <Image
-                        src={!user?.picture ? "/src/assets/default.jpg" : user.picture}
-                        border="5px solid red"
-                        ml={"20px"}
-                        borderColor={bg.secondary}
-                        width="75px"
-                        height="75px"
-                        mt="-38px"
-                        borderRadius="50%"
+                        src={!user?.cover ? "https://i.ibb.co/xmP2pS6/Profile.png" : user.cover}
+                        w="100%"
+                        h="100%"
+                        opacity={1}
+                        sx={{ ".container:hover &": { opacity: 0.3 } }}
+                        objectFit="cover"
+                        borderRadius="20px"
                     />
-                    <Box ml={"auto"} mt={{ base: "-5px", lg: "-2px", xl: "-20px" }} bg={"none"}>
-                        <Button
-                            w={{ lg: "90%", xl: "100%" }}
-                            height={{ lg: "25px", xl: "30px" }}
-                            px={4}
-                            py={4}
-                            bg={"none"}
-                            border={"1px solid #555"}
-                            borderRadius={"40px"}
-                            color={"white"}
-                            _hover={{ bg: "#555" }}>
-                            Edit Profile
-                        </Button>
+                    {userLogin.username !== username ? null : (
+                        <Box
+                            sx={{ ".container:hover &": { opacity: 1 } }}
+                            opacity={0}
+                            w={90}
+                            top={"1.65rem"}
+                            left={260}
+                            h={90}
+                            bg={"white"}
+                            borderRadius={"100%"}
+                            pos={"absolute"}
+                            _hover={{ cursor: "pointer" }}
+                            onClick={() => dispatch(openCover(true))}
+                            zIndex={1}>
+                            <Flex justifyContent={"center"} alignItems={"center"} mt={"1.3rem"}>
+                                <RiImageEditFill size={50} color="black" />
+                            </Flex>
+                        </Box>
+                    )}
+                </Box>
+                <Flex flexDirection="column" mb="10px">
+                    <Box w={"75px"} h={"35px"} zIndex={1} ml={"20px"}>
+                        <Image
+                            src={!user?.picture ? "/src/assets/default.jpg" : user.picture}
+                            border="5px solid red"
+                            // ml={"20px"}
+                            borderColor={bg.secondary}
+                            width="75px"
+                            // bg={"rgba(0, 0, 0, 0.9)"}
+                            height="75px"
+                            mt="-35px"
+                            className="img"
+                            borderRadius="50%"
+                            opacity={1}
+                            zIndex={1}
+                            // _hover={{ cursor: "pointer" }}
+                            // sx={{ ".test:hover &": { opacity: 0 } }}
+                        />
+                        {userLogin.username !== username ? null : (
+                            <Box
+                                opacity={1}
+                                // className="test"
+                                // sx={{ ".contain:hover &": { opacity: 1 } }}
+                                bg={"white"}
+                                borderRadius={"100%"}
+                                w={"30px"}
+                                h={"30px"}
+                                zIndex={1000}
+                                mt={"-30px"}
+                                // mb={"-15px"}
+                                onClick={() => dispatch(openPicture(true))}
+                                ms={"50px"}
+                                _hover={{ cursor: "pointer" }}>
+                                <Flex justifyContent={"center"} alignItems={"center"} pt={"5px"}>
+                                    <RiImageEditFill size={20} color="black" />
+                                </Flex>
+                            </Box>
+                        )}
                     </Box>
+                    <Box
+                        ml={"auto"}
+                        mt={{ base: "-5px", lg: "-2px", xl: "-20px" }}
+                        height={{ lg: "25px", xl: "30px" }}
+                        bg={"none"}>
+                        {userLogin.username !== username ? null : (
+                            <Button
+                                w={{ lg: "90%", xl: "100%" }}
+                                px={4}
+                                py={4}
+                                bg={"none"}
+                                border={"1px solid #555"}
+                                borderRadius={"40px"}
+                                color={"white"}
+                                onClick={() => dispatch(openEdit(true))}
+                                _hover={{ bg: "#555" }}>
+                                Edit Profile
+                            </Button>
+                        )}
+                    </Box>
+                    <EditModal />
+                    <CoverModal />
+                    <PictureModal />
                     <Text
                         fontWeight="600"
                         color={text.primary}
                         bg={"none"}
                         textAlign="left"
-                        mt={2}
+                        // mt={2}
                         fontSize="xl"
                         textTransform={"capitalize"}>
                         {user?.name}
@@ -102,12 +170,11 @@ export default function UserProfile() {
                     content={data.content}
                     image={data.image}
                     likes={data.likes}
-                    isLiked={data.isLiked}
                     replies={data.replies}
                     created_at={data.created_at}
                     updated_at={data.updated_at}
                     author={{ id: user?.id, name: user?.name, username: user?.username, picture: user?.picture }}
-                    profile={true}
+                    user={userLogin.id}
                     username={username!}
                 />
             ))}

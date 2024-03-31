@@ -1,14 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { ChangeEvent, FormEvent, useState } from "react";
-import api from "../../../libs/api";
 import { updateMsgLogin } from "../../../stores/slices/msgLogin";
+import { GET_TOKEN } from "../../../stores/slices/token";
+import API from "../../../libs/api";
+import Cookies from "js-cookie";
 
 export function useLogin() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const exp = new Date(Date.now() + 7 * 24 * 60 * 60 * 1000);
-
     const [form, setForm] = useState({
         username: "",
         password: "",
@@ -24,11 +24,16 @@ export function useLogin() {
     async function login(e: FormEvent<HTMLFormElement>) {
         e.preventDefault();
         try {
-            const response = await api.post(`/login`, form);
-            document.cookie = `C.id=${response.data.token};expires=${exp.toUTCString()};samesite=none;secure=false`;
+            const response = await API.post(`/login`, form);
+            Cookies.set("C.id", response.data.token, { expires: 7 });
+            dispatch(GET_TOKEN(response.data.token));
             navigate("/");
         } catch (error: any) {
             dispatch(updateMsgLogin({ message: error.response.data.message }));
+            setForm({
+                username: "",
+                password: "",
+            });
         }
     }
     return {

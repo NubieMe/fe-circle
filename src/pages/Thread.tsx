@@ -1,4 +1,4 @@
-import Detail from "../components/Detail";
+import Detail from "../features/reply/components/Detail";
 import { useParams } from "react-router-dom";
 import { Layout } from "../layout/Layout";
 

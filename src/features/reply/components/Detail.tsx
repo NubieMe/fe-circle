@@ -1,13 +1,30 @@
-import { Avatar, Box, Button, Flex, FormLabel, Image, Input, Link, Text } from "@chakra-ui/react";
-import { text } from "../styles/style";
+import {
+    Avatar,
+    Box,
+    Button,
+    Flex,
+    FormLabel,
+    IconButton,
+    Image,
+    Input,
+    Link,
+    Menu,
+    MenuButton,
+    MenuItem,
+    MenuList,
+    Spacer,
+    Text,
+} from "@chakra-ui/react";
+import { bg, text } from "../../../styles/style";
 import { FaArrowLeft, FaComment, FaHeart } from "react-icons/fa";
 import { FaImage } from "react-icons/fa6";
-import { useEffect } from "react";
-import { dateThread, getDistanceTime } from "../utils/date";
+import { useEffect, useState } from "react";
+import { dateThread, getDistanceTime } from "../../../utils/date";
 import { useSelector } from "react-redux";
-import { RootState } from "../stores/store";
+import { RootState } from "../../../stores/store";
 import { useNavigate } from "react-router-dom";
-import { useThread } from "../hooks/useThread";
+import { useReply } from "../hooks/useReply";
+import { HiDotsHorizontal } from "react-icons/hi";
 
 interface Detail {
     id: string;
@@ -16,8 +33,13 @@ interface Detail {
 const Detail = (props: Detail) => {
     const thread = useSelector((state: RootState) => state.thread);
     const user = useSelector((state: RootState) => state.user);
+    if (user.id === 0) return null;
+    const isTrue = thread.likes.some((val) => val.author.id === user.id);
+    const [isLiked, setIsLiked] = useState(isTrue);
+    const [likes, setLikes] = useState(thread.likes.length);
     const navigate = useNavigate();
-    const { getThread, postReply, likeThread, unlikeThread, likeReply, unlikeReply, handleReply } = useThread();
+    const { getThread, postReply, likeThread, unlikeThread, likeReply, unlikeReply, handleReply, deleteReply } =
+        useReply();
 
     useEffect(() => {
         if (user.id === 0 && document.cookie) return;
@@ -36,7 +58,11 @@ const Detail = (props: Detail) => {
                 </Text>
             </Flex>
             <Flex mb={2}>
-                <Avatar size={"md"} mt={1} src="/src/assets/default.jpg" />
+                <Avatar
+                    size={"md"}
+                    mt={1}
+                    src={!thread.author.picture ? "/src/assets/default.jpg" : thread.author.picture}
+                />
                 <Flex ms={3} direction={"column"} mt={1}>
                     <Text fontWeight={"semibold"} textTransform={"capitalize"}>
                         {thread?.author.name}
@@ -62,12 +88,17 @@ const Detail = (props: Detail) => {
             <Text color={text.secondary}>{dateThread(thread?.created_at)}</Text>
             <Flex direction="row" my={3}>
                 <Box me={2} mt={1}>
-                    <Link onClick={() => (!thread?.isLiked ? likeThread(thread!.id) : unlikeThread(thread!.id))}>
-                        {!thread?.isLiked ? <FaHeart /> : <FaHeart color="Red" />}
+                    <Link
+                        onClick={() =>
+                            !isLiked
+                                ? (likeThread(thread!.id), setIsLiked((prev) => !prev), setLikes((prev) => prev + 1))
+                                : (unlikeThread(thread!.id), setIsLiked((prev) => !prev), setLikes((prev) => prev - 1))
+                        }>
+                        {!isLiked ? <FaHeart /> : <FaHeart color="Red" />}
                     </Link>
                 </Box>
                 <Text color={text.primary} me={3}>
-                    {thread?.likes.length}
+                    {likes}
                 </Text>
                 <Box me={-0.5} mt={1}>
                     <FormLabel htmlFor="content">
@@ -89,6 +120,7 @@ const Detail = (props: Detail) => {
                     variant="ghost"
                     color="white"
                     mt="1"
+                    bg={bg.primary}
                     onChange={(e) => handleReply(e)}
                 />
                 <FormLabel htmlFor="image" mt="3">
@@ -148,6 +180,32 @@ const Detail = (props: Detail) => {
                                 <Text color={text.primary}>{data.likes}</Text>
                             </Flex>
                         </Flex>
+                        <Spacer />
+                        {data.author.id !== user.id ? null : (
+                            <Menu isLazy>
+                                <MenuButton
+                                    mt={-2}
+                                    bg={bg.primary}
+                                    _hover={{ bg: "none" }}
+                                    _active={{ bg: "none" }}
+                                    p={"none"}
+                                    as={IconButton}
+                                    aria-label="Options"
+                                    icon={<HiDotsHorizontal color={text.primary} />}
+                                />
+                                <MenuList bg={bg.secondary}>
+                                    {/* <MenuItem>
+                                        Update
+                                    </MenuItem> */}
+                                    <MenuItem
+                                        bg={bg.secondary}
+                                        _hover={{ bg: "#555" }}
+                                        onClick={() => deleteReply(data.id, thread.id)}>
+                                        Delete
+                                    </MenuItem>
+                                </MenuList>
+                            </Menu>
+                        )}
                     </Flex>
                 ))}
             </Flex>

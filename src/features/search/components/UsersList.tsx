@@ -13,6 +13,7 @@ const UsersList = () => {
     const user = useSelector((state: RootState) => state.user);
     const dispatch = useDispatch();
     const { input, setInput, search } = useSearch();
+
     useEffect(() => {
         if (!input) {
             dispatch(GET_USERS({ data: [] }));
@@ -20,6 +21,7 @@ const UsersList = () => {
             search();
         }
     }, [input]);
+    
     return (
         <>
             <Box p={3}>

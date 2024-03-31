@@ -1,21 +1,24 @@
-import { Avatar, Box, Button, Card, Flex, Heading, Link, Spacer, Text } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { Card, Flex, Heading } from "@chakra-ui/react";
+import { useEffect, useState } from "react";
 import { bg, text } from "../../../styles/style";
-import { useSuggest } from "../hooks/useSuggest";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
-import { useNavigate } from "react-router-dom";
+import SuggestCard from "./SuggestCard";
+import { users } from "../../../types/user";
+import API from "../../../libs/api";
 
 const Suggestion = () => {
-    const { getSuggest, followSuggest } = useSuggest();
-    const suggestion = useSelector((state: RootState) => state.suggestion.data);
-    const user = useSelector((state: RootState) => state.user.id);
-    const navigate = useNavigate();
+    const [suggestion, setSuggestion] = useState<users[]>([]);
+
+    async function getSuggest() {
+        const response = await API.get(`/suggestion`);
+        setSuggestion(response.data);
+    }
+    const user = useSelector((state: RootState) => state.user);
 
     useEffect(() => {
-        if (user === 0) return;
         getSuggest();
-    }, [user]);
+    }, []);
 
     if (suggestion.length === 0) return null;
     return (
@@ -25,34 +28,15 @@ const Suggestion = () => {
             </Heading>
             <Flex direction="column">
                 {suggestion.map((data, index) => (
-                    <Box display="flex" flexDirection="row" bg={bg.secondary} key={index}>
-                        <Avatar
-                            size={"md"}
-                            src={!data.picture ? "/src/assets/default.jpg" : data.picture}
-                            mt={1}
-                            me={2}
-                            onClick={() => navigate(`/${data.username}`)}
-                        />
-                        <Flex direction="column" bg={bg.secondary} mt={1}>
-                            <Link onClick={() => navigate(`/${data.username}`)}>
-                                <Text color={text.primary} bg={bg.secondary} textTransform={"capitalize"}>
-                                    {data.name}
-                                </Text>
-                                <Text color={text.secondary} bg={bg.secondary}>
-                                    @{data.username}
-                                </Text>
-                            </Link>
-                        </Flex>
-                        <Spacer bg={bg.secondary} />
-                        <Button
-                            mt={1}
-                            variant={"outline"}
-                            color={"whitesmoke"}
-                            borderRadius={20}
-                            onClick={() => followSuggest(data.id)}>
-                            Follow
-                        </Button>
-                    </Box>
+                    <SuggestCard
+                        key={index}
+                        id={data.id}
+                        username={data.username}
+                        name={data.name}
+                        picture={data.picture}
+                        bio={data.picture}
+                        follow={user.following}
+                    />
                 ))}
             </Flex>
         </Card>

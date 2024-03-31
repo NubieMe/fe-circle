@@ -15,14 +15,14 @@ export const Layout = ({ children, home, search, follows, profile }: Props) => {
     return (
         <Box>
             <Flex w={"100%"} h={"auto"} bg={bg.primary}>
-                <Box h={"auto"} w={{ base: "3rem", lg: "20%", xl: "25%" }} bg={"blue"} pos={"relative"}>
+                <Box h={"auto"} w={{ base: "4rem", lg: "20%", xl: "25%" }} pos={"relative"}>
                     <Box
                         pos={"fixed"}
                         zIndex={10}
                         top={0}
                         bottom={0}
                         left={0}
-                        w={{ base: "3rem", lg: "18%", xl: "19.98%" }}>
+                        w={{ base: "4rem", lg: "18%", xl: "19.98%" }}>
                         <LeftSidebar home={home} search={search} follows={follows} profile={profile} />
                     </Box>
                 </Box>

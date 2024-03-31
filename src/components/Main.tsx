@@ -1,23 +1,26 @@
-import { Avatar, Box, Button, Flex, FormLabel, Input, Link, Text } from "@chakra-ui/react";
+import { Avatar, Box, Button, Flex, FormLabel, Input, Skeleton, Text } from "@chakra-ui/react";
 import { FaImage } from "react-icons/fa6";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../stores/store";
 import ThreadCard from "./ThreadCard";
 import { useThread } from "../hooks/useThread";
-import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
+import { fetchThreads } from "../stores/slices/threads";
+import { bg } from "../styles/style";
+import { useAppDispatch } from "../stores/hooks";
 
 const Main = () => {
-    const threads = useSelector((state: RootState) => state.threads.data);
     const user = useSelector((state: RootState) => state.user);
-    const { getThreads, postThread, handleChange } = useThread();
-    const navigate = useNavigate();
+    const threads = useSelector((state: RootState) => state.threads);
+    const { postThread, handleChange } = useThread();
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
-        if (user.id === 0 && document.cookie) return;
-        getThreads(user.id);
-    }, [user.id]);
+        dispatch(fetchThreads());
+    }, []);
 
+    if (user.id === 0) return null;
     return (
         <Box pt="20px" px="20px" h={"100%"} w={"100%"}>
             <Text fontSize="28" fontWeight="500" color="white" mb="2">
@@ -26,11 +29,12 @@ const Main = () => {
             <form>
                 <Flex mb="3">
                     <Box>
-                        <Link onClick={() => navigate(`/${user.username}`)}>
+                        <Link to={`/${user.username}`}>
                             <Avatar src={!user.picture ? "/src/assets/default.jpg" : user.picture} />
                         </Link>
                     </Box>
                     <Input
+                        bg={bg.primary}
                         placeholder="What is happening?"
                         variant="ghost"
                         name="content"
@@ -62,19 +66,21 @@ const Main = () => {
                     </Button>
                 </Flex>
             </form>
-            {threads.map((data, index) => (
-                <ThreadCard
-                    key={index}
-                    id={data.id}
-                    content={data.content}
-                    image={data.image}
-                    likes={data.likes}
-                    isLiked={data.isLiked}
-                    replies={data.replies}
-                    created_at={data.created_at}
-                    updated_at={data.updated_at}
-                    author={data.author}
-                />
+            {threads.data.map((data, index) => (
+                <Skeleton isLoaded={!threads.isLoading}>
+                    <ThreadCard
+                        key={index}
+                        id={data.id}
+                        content={data.content}
+                        image={data.image}
+                        likes={data.likes}
+                        replies={data.replies}
+                        created_at={data.created_at}
+                        updated_at={data.updated_at}
+                        author={data.author}
+                        user={user.id}
+                    />
+                </Skeleton>
             ))}
         </Box>
     );

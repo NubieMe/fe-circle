@@ -3,24 +3,19 @@ import { bg, text } from "../../../styles/style";
 import { useSelector } from "react-redux";
 import { useEffect } from "react";
 import { RootState } from "../../../stores/store";
-import { useDispatch } from "react-redux";
-import { updateUser } from "../../../stores/slices/user";
-import api from "../../../libs/api";
 import { Right } from "../../../components/RightSidebar";
+import { useCurrent } from "../hooks/useCurrent";
+import { useDispatch } from "react-redux";
+import { GET_TOKEN } from "../../../stores/slices/token";
+import { useNavigate } from "react-router-dom";
 
 const ProfileCard = ({ profile }: Right) => {
+    const dispatch = useDispatch();
+    const navigate = useNavigate();
     const user = useSelector((state: RootState) => state.user);
     const token = document.cookie.replace("C.id=", "");
-    const dispatch = useDispatch();
-
-    async function getCurrent() {
-        const res = await api.get("/user/me/current", {
-            headers: {
-                Authorization: `Bearer ${token}`,
-            },
-        });
-        dispatch(updateUser(res.data));
-    }
+    dispatch(GET_TOKEN(token));
+    const { getCurrent } = useCurrent();
 
     useEffect(() => {
         if (!token) return;
@@ -49,6 +44,8 @@ const ProfileCard = ({ profile }: Right) => {
             <Image
                 src={!user.cover ? "https://i.ibb.co/xmP2pS6/Profile.png" : user.cover}
                 maxW="100%"
+                h={"7rem"}
+                objectFit={"cover"}
                 borderRadius="20px"
             />
             <Flex bg={"none"} flexDirection="column" mb="10px">
@@ -72,7 +69,8 @@ const ProfileCard = ({ profile }: Right) => {
                         border={"1px solid #555"}
                         borderRadius={"40px"}
                         color={"white"}
-                        _hover={{ bg: "#555" }}>
+                        _hover={{ bg: "#555" }}
+                        onClick={() => navigate(`/${user.username}`)}>
                         Edit Profile
                     </Button>
                 </Box>
@@ -81,7 +79,7 @@ const ProfileCard = ({ profile }: Right) => {
                     color={text.primary}
                     bg={"none"}
                     textAlign="left"
-                    mt={2}
+                    // mt={2}
                     fontSize="xl"
                     textTransform={"capitalize"}>
                     {user.name}

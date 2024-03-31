@@ -1,6 +1,6 @@
 import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Home from "./pages/Home";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, Heading } from "@chakra-ui/react";
 import Thread from "./pages/Thread";
 import { extendTheme } from "@chakra-ui/react";
 import Follows from "./pages/Follows";
@@ -8,6 +8,8 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Search from "./pages/Search";
 import Profile from "./pages/Profile";
+import { Layout } from "./layout/Layout";
+import Cookies from "js-cookie";
 
 const theme = extendTheme({
     styles: {
@@ -21,17 +23,17 @@ const theme = extendTheme({
 });
 
 function IsLogin() {
-    const token = document.cookie.replace("C.id=", "");
-    if (token) {
-        return <Navigate to={"/"} />;
+    const token = Cookies.get("C.id");
+    if (!token) {
+        return <Navigate to={"/login"} />;
     }
 
     return <Outlet />;
 }
 
 function IsNotLogin() {
-    const token = document.cookie.replace("C.id=", "");
-    if (!token) {
+    const token = Cookies.get("C.id");
+    if (token) {
         return <Navigate to={"/"} />;
     }
 
@@ -44,17 +46,39 @@ function App() {
             <ChakraProvider theme={theme}>
                 <Router>
                     <Routes>
-                        <Route path="/" element={<Home />} />
+                        <Route path="*" element={<Heading>Not Found</Heading>} />
+                        <Route path="/" element={<IsLogin />}>
+                            <Route
+                                path="/"
+                                element={
+                                    <Layout home>
+                                        <Home />
+                                    </Layout>
+                                }
+                            />
+                            <Route
+                                path="/follow"
+                                element={
+                                    <Layout follows>
+                                        <Follows />
+                                    </Layout>
+                                }
+                            />
+                            <Route
+                                path="/search"
+                                element={
+                                    <Layout search>
+                                        <Search />
+                                    </Layout>
+                                }
+                            />
+                        </Route>
+                        <Route path="/" element={<IsNotLogin />}>
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/register" element={<Register />} />
+                        </Route>
                         <Route path="/:username" element={<Profile />} />
-                        {/* <Route path="/" element={<IsLogin />}> */}
-                        <Route path="/login" element={<Login />} />
-                        <Route path="/register" element={<Register />} />
-                        {/* </Route> */}
-                        {/* <Route path="/" element={<IsNotLogin />}> */}
-                        <Route path="/follow" element={<Follows />} />
-                        {/* </Route> */}
                         <Route path="/thread/:id" element={<Thread />} />
-                        <Route path="/search" element={<Search />} />
                     </Routes>
                 </Router>
             </ChakraProvider>

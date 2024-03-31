@@ -1,8 +1,9 @@
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, FormEvent, useState } from "react";
-import api from "../../../libs/api";
+import API from "../../../libs/api";
 import { updateMsgRegister } from "../../../stores/slices/msgRegister";
+import { GET_TOKEN } from "../../../stores/slices/token";
 
 export function useRegister() {
     const navigate = useNavigate();
@@ -26,8 +27,9 @@ export function useRegister() {
     async function register(e: FormEvent<HTMLFormElement>) {
         try {
             e.preventDefault();
-            const response = await api.post("/register", form);
+            const response = await API.post("/register", form);
             document.cookie = `C.id=${response.data.token};expires=${exp.toUTCString()};samesite=none;secure=false`;
+            dispatch(GET_TOKEN(response.data.token));
             navigate("/");
         } catch (error: any) {
             dispatch(updateMsgRegister({ message: error.response.data.message }));

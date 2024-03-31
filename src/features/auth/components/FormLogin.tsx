@@ -1,4 +1,4 @@
-import { Alert, AlertDescription, Button, Input, Stack } from "@chakra-ui/react";
+import { Alert, AlertDescription, AlertIcon, Button, Input, Stack } from "@chakra-ui/react";
 import { text } from "../../../styles/style";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../stores/store";
@@ -11,6 +11,7 @@ export default function FormLogin() {
         <>
             {!message ? null : (
                 <Alert status="error" borderRadius={5} mb={3}>
+                    <AlertIcon/>
                     <AlertDescription bg={"none"} color={"black"}>
                         {message}
                     </AlertDescription>

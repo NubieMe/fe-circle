@@ -9,7 +9,7 @@ export interface Right {
 
 const RightSidebar = ({ profile }: Right) => {
     return (
-        <Box p="5" w={"100%"} h={"100%"} borderLeft={"1px solid #fff"}>
+        <Box p="5" w={"100%"} h={"100%"} borderLeft={"1px solid #fff"} minH={"100vh"}>
             <ProfileCard profile={profile} />
             <Suggestion />
             <Card bg={bg.secondary} p="3" borderRadius={20}>
