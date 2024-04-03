@@ -1,13 +1,13 @@
 import { Navigate, Outlet, Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Home from "./pages/Home";
+import Home from "./pages/home/index";
 import { ChakraProvider, Heading } from "@chakra-ui/react";
-import Thread from "./pages/Thread";
+import Thread from "./pages/thread";
 import { extendTheme } from "@chakra-ui/react";
-import Follows from "./pages/Follows";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Search from "./pages/Search";
-import Profile from "./pages/Profile";
+import Follows from "./pages/follow";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import Search from "./pages/search";
+import Profile from "./pages/profile";
 import { Layout } from "./layout/Layout";
 import Cookies from "js-cookie";
 
@@ -48,37 +48,20 @@ function App() {
                     <Routes>
                         <Route path="*" element={<Heading>Not Found</Heading>} />
                         <Route path="/" element={<IsLogin />}>
-                            <Route
-                                path="/"
-                                element={
-                                    <Layout home>
-                                        <Home />
-                                    </Layout>
-                                }
-                            />
-                            <Route
-                                path="/follow"
-                                element={
-                                    <Layout follows>
-                                        <Follows />
-                                    </Layout>
-                                }
-                            />
-                            <Route
-                                path="/search"
-                                element={
-                                    <Layout search>
-                                        <Search />
-                                    </Layout>
-                                }
-                            />
+                            <Route path="/" element={<Layout />}>
+                                <Route path="/" element={<Home />} />
+                                <Route path="/follow" element={<Follows />} />
+                                <Route path="/search" element={<Search />} />
+                            </Route>
                         </Route>
                         <Route path="/" element={<IsNotLogin />}>
                             <Route path="/login" element={<Login />} />
                             <Route path="/register" element={<Register />} />
                         </Route>
-                        <Route path="/:username" element={<Profile />} />
-                        <Route path="/thread/:id" element={<Thread />} />
+                        <Route path="/" element={<Layout />}>
+                            <Route path="/:username" element={<Profile />} />
+                            <Route path="/thread/:id" element={<Thread />} />
+                        </Route>
                     </Routes>
                 </Router>
             </ChakraProvider>

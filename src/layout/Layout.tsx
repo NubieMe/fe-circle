@@ -1,17 +1,10 @@
 import { Box, Flex } from "@chakra-ui/react";
-import React from "react";
 import LeftSidebar from "../components/LeftSidebar";
 import RightSidebar from "../components/RightSidebar";
 import { bg } from "../styles/style";
+import { Outlet } from "react-router-dom";
 
-interface Props {
-    children: React.ReactNode;
-    home?: boolean;
-    search?: boolean;
-    follows?: boolean;
-    profile?: boolean;
-}
-export const Layout = ({ children, home, search, follows, profile }: Props) => {
+export const Layout = () => {
     return (
         <Box>
             <Flex w={"100%"} h={"auto"} bg={bg.primary}>
@@ -23,14 +16,16 @@ export const Layout = ({ children, home, search, follows, profile }: Props) => {
                         bottom={0}
                         left={0}
                         w={{ base: "4rem", lg: "18%", xl: "19.98%" }}>
-                        <LeftSidebar home={home} search={search} follows={follows} profile={profile} />
+                        <LeftSidebar />
                     </Box>
                 </Box>
 
                 <Flex w={"100%"} h={"auto"}>
-                    <Box w={{ base: "100%", md: "100%", lg: "100%", xl: "65%" }}>{children}</Box>
+                    <Box w={{ base: "100%", md: "100%", lg: "100%", xl: "65%" }}>
+                        <Outlet />
+                    </Box>
                     <Box w={{ base: "0px", md: "0px", lg: "40%", xl: "35%" }} overflow={"hidden"}>
-                        <RightSidebar profile={profile} />
+                        <RightSidebar />
                     </Box>
                 </Flex>
             </Flex>

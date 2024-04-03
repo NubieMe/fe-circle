@@ -4,17 +4,11 @@ import API from "../../libs/api";
 
 export const fetchThreads = createAsyncThunk<Thread[], void, { rejectValue: string }>(
     "thread/fetchThreads",
-    async (id, thunkAPI) => {
+    async (_, thunkAPI) => {
         try {
-            // const { api } = useAPI();
-            // const user = useSelector((state: RootState) => state.user.id);
-            // console.log("id", id);
             const response = await API.get(`http://localhost:5000/api/v1/thread`);
-            console.log(response);
             return response.data;
         } catch (error) {
-            // console.log(error);
-            // throw error;
             if (error instanceof Error) {
                 return thunkAPI.rejectWithValue(error.message);
             } else {
@@ -25,10 +19,9 @@ export const fetchThreads = createAsyncThunk<Thread[], void, { rejectValue: stri
         }
     }
 );
-const data: Thread[] = [];
 
-const initialState = {
-    data,
+const initialState: { data: Thread[]; isLoading: boolean; isError: boolean } = {
+    data: [],
     isLoading: false,
     isError: false,
 };

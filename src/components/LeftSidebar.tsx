@@ -1,28 +1,44 @@
-import { Box, Button, Card, Text, Heading, Link, Flex, HStack } from "@chakra-ui/react";
+import { Box, Button, Card, Text, Heading, Flex, Link, HStack } from "@chakra-ui/react";
 import { bg, text } from "../styles/style";
 import { updateModal } from "../stores/slices/modal";
-import { useNavigate } from "react-router-dom";
-import PostModal from "../features/postModal/components/PostModal";
+import { NavLink, useNavigate } from "react-router-dom";
+import PostModal from "./PostModal";
 import { TbLogout } from "react-icons/tb";
-import { FaSearch, FaHeart, FaPencilAlt } from "react-icons/fa";
-import { AiFillHome, AiOutlineHome } from "react-icons/ai";
-import { HiMagnifyingGlass, HiOutlineUser, HiUserCircle } from "react-icons/hi2";
+import { FaPencilAlt } from "react-icons/fa";
+import { AiOutlineHome } from "react-icons/ai";
+import { HiMagnifyingGlass, HiOutlineUser } from "react-icons/hi2";
 import { CiHeart } from "react-icons/ci";
 import API from "../libs/api";
 import Cookies from "js-cookie";
 import { useAppDispatch, useAppSelector } from "../stores/hooks";
 
-interface navbar {
-    home?: boolean;
-    search?: boolean;
-    follows?: boolean;
-    profile?: boolean;
-}
-
-const LeftSidebar = (props: navbar) => {
+const LeftSidebar = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const user = useAppSelector((state) => state.user.username);
+
+    const NAV_ITEM = [
+        {
+            name: "Home",
+            path: "/",
+            icon: <AiOutlineHome size={30} color={text.primary} />,
+        },
+        {
+            name: "Search",
+            path: "/search",
+            icon: <HiMagnifyingGlass size={30} color={text.primary} />,
+        },
+        {
+            name: "Follows",
+            path: "/follow",
+            icon: <CiHeart size={30} color={text.primary} />,
+        },
+        {
+            name: "Profile",
+            path: `/${user}`,
+            icon: <HiOutlineUser size={30} color={text.primary} />,
+        },
+    ];
 
     function logout() {
         API.delete("/logout");
@@ -47,137 +63,39 @@ const LeftSidebar = (props: navbar) => {
                         </Heading>
                     </Link>
                 </HStack>
-                <Box>
-                    <Link display="flex" onClick={() => navigate("/")} gap="3">
-                        {!props.home ? (
-                            <>
-                                <AiOutlineHome size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={500}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Home
-                                </Text>
-                            </>
-                        ) : (
-                            <>
-                                <AiFillHome size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={600}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Home
-                                </Text>
-                            </>
-                        )}
-                    </Link>
-                </Box>
-                <Box>
-                    <Link display="flex" onClick={() => navigate("/search")} gap="3">
-                        {!props.search ? (
-                            <>
-                                <HiMagnifyingGlass size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={500}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Search
-                                </Text>
-                            </>
-                        ) : (
-                            <>
-                                <FaSearch size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={600}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Search
-                                </Text>
-                            </>
-                        )}
-                    </Link>
-                </Box>
-                <Box>
-                    <Link display="flex" onClick={() => navigate("/follow")} gap="3">
-                        {!props.follows ? (
-                            <>
-                                <CiHeart size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={500}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Follows
-                                </Text>
-                            </>
-                        ) : (
-                            <>
-                                <FaHeart size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={600}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Follows
-                                </Text>
-                            </>
-                        )}
-                    </Link>
-                </Box>
-                <Box>
-                    <Link display="flex" onClick={() => navigate(`/${user}`)} gap="3">
-                        {!props.profile ? (
-                            <>
-                                <HiOutlineUser size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={500}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Profile
-                                </Text>
-                            </>
-                        ) : (
-                            <>
-                                <HiUserCircle size={30} color={text.primary} />
-                                <Text
-                                    color={text.primary}
-                                    fontSize="16"
-                                    mt={1}
-                                    fontWeight={600}
-                                    display={{ base: "none", lg: "inline-block" }}>
-                                    Profile
-                                </Text>
-                            </>
-                        )}
-                    </Link>
-                </Box>
+                {NAV_ITEM.map((item, index) => (
+                    <NavLink
+                        key={index}
+                        to={item.path}
+                        style={({ isActive, isPending, isTransitioning }) => {
+                            return {
+                                fontWeight: isActive ? "bold" : "",
+                                color: isPending ? "red" : "black",
+                                viewTransitionName: isTransitioning ? "slide" : "",
+                            };
+                        }}>
+                        <Flex gap="3">
+                            {item.icon}
+                            <Text color={text.primary} mt={1} display={{ base: "none", lg: "inline-block" }}>
+                                {item.name}
+                            </Text>
+                        </Flex>
+                    </NavLink>
+                ))}
                 <PostModal />
-                <Link onClick={() => dispatch(updateModal({ open: true }))}>
-                    <Button
-                        w={"100%"}
-                        ml="-5px"
-                        bg={"green"}
-                        color={text.primary}
-                        borderRadius={20}
-                        _hover={{ bg: "green.500" }}>
-                        <Text display={{ base: "none", lg: "inline-block" }}>Create Post</Text>
-                        <Text display={{ base: "inline-block", lg: "none" }} mt={1}>
-                            <FaPencilAlt color={text.primary} size={22} />
-                        </Text>
-                    </Button>
-                </Link>
+                <Button
+                    w={"100%"}
+                    ml="-5px"
+                    bg={"green"}
+                    color={text.primary}
+                    borderRadius={20}
+                    onClick={() => dispatch(updateModal({ open: true }))}
+                    _hover={{ bg: "green.500" }}>
+                    <Text display={{ base: "none", lg: "inline-block" }}>Create Post</Text>
+                    <Text display={{ base: "inline-block", lg: "none" }} mt={1}>
+                        <FaPencilAlt color={text.primary} size={22} />
+                    </Text>
+                </Button>
                 <Box mt={{ base: 265, lg: 240, xl: 260 }}>
                     <Link display="flex" gap="3" onClick={() => logout()}>
                         <Text fontSize={"2rem"} me={{ base: "100px", lg: 0 }}>

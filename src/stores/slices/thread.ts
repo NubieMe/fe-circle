@@ -6,7 +6,6 @@ const initialState: DetailThread = {
     content: "",
     image: [],
     likes: [],
-    isLiked: false,
     replies: [],
     created_at: "",
     updated_at: "",
@@ -27,7 +26,6 @@ const threadsSlice = createSlice({
             state.content = action.payload.content;
             state.image = action.payload.image;
             state.likes = action.payload.likes;
-            state.isLiked = action.payload.isLiked;
             state.replies = action.payload.replies;
             state.created_at = action.payload.created_at;
             state.updated_at = action.payload.updated_at;

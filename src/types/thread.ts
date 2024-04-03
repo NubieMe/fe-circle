@@ -3,7 +3,7 @@ export type Thread = {
     content: string;
     image: string[] | null;
     likes: Like[];
-    replies: any[];
+    replies?: any[];
     created_at: string;
     updated_at: string;
     author: {
@@ -12,8 +12,6 @@ export type Thread = {
         username: string;
         picture: string | null;
     };
-    user?: number;
-    username?: string;
 };
 
 export type DetailThread = {
@@ -21,7 +19,23 @@ export type DetailThread = {
     content: string;
     image: string[] | null;
     likes: Like[];
-    replies: any[];
+    replies: Reply[];
+    created_at: string;
+    updated_at: string;
+    author: {
+        id: number;
+        name: string;
+        username: string;
+        picture: string | null;
+    };
+};
+
+export type Reply = {
+    id: number;
+    content: string;
+    image: string | null;
+    likes: Like[];
+    replies: Thread[];
     created_at: string;
     updated_at: string;
     author: {

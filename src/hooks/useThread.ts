@@ -3,9 +3,11 @@ import { postThread } from "../types/thread";
 import API from "../libs/api";
 import { useAppDispatch } from "../stores/hooks";
 import { fetchThreads } from "../stores/slices/threads";
+import { useToast } from "@chakra-ui/react";
 
 export function useThread() {
     const dispatch = useAppDispatch();
+    const toast = useToast();
 
     const [form, setForm] = useState<postThread>({
         content: "",
@@ -29,20 +31,33 @@ export function useThread() {
 
     async function postThread(e: React.MouseEvent<HTMLButtonElement | MouseEvent>) {
         e.preventDefault();
-
-        const formData = new FormData();
-        formData.append("content", form.content);
-        if (form.image) {
-            for (let i = 0; i < form.image!.length; i++) {
-                formData.append(`image${[[i]]}`, form.image[i]);
+        const promise = new Promise(async (res, rej) => {
+            try {
+                const formData = new FormData();
+                formData.append("content", form.content);
+                if (form.image) {
+                    let i = 0;
+                    const len = form.image!.length;
+                    for (i; i < len; i++) {
+                        formData.append(`image${[[i]]}`, form.image[i]);
+                    }
+                }
+                await API.post(`/thread`, formData);
+                setForm({
+                    content: "",
+                    image: null,
+                });
+                dispatch(fetchThreads());
+                res("ok");
+            } catch (error) {
+                rej();
             }
-        }
-        await API.post(`/thread`, formData);
-        setForm({
-            content: "",
-            image: null,
         });
-        dispatch(fetchThreads());
+        toast.promise(promise, {
+            success: { title: "Success", description: "post thread success!" },
+            error: { title: "Error", description: "post thread failed!" },
+            loading: { title: "Please wait", description: "posting thread..." },
+        });
     }
 
     async function like(id: number) {
@@ -54,11 +69,24 @@ export function useThread() {
     }
 
     async function deleteThread(id: Number) {
-        await API.delete(`/thread/${id}`);
-        dispatch(fetchThreads());
+        const promise = new Promise(async (res, rej) => {
+            try {
+                await API.delete(`/thread/${id}`);
+                dispatch(fetchThreads());
+                res("ok");
+            } catch (error) {
+                rej();
+            }
+        });
+        toast.promise(promise, {
+            success: { title: "Success", description: "delete thread success!" },
+            error: { title: "Error", description: "delete thread failed!" },
+            loading: { title: "Please wait", description: "deleting thread..." },
+        });
     }
 
     return {
+        form,
         handleChange,
         postThread,
         like,

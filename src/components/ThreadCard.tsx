@@ -23,14 +23,18 @@ import { FaComment } from "react-icons/fa6";
 import { HiDotsHorizontal } from "react-icons/hi";
 import { Thread } from "../types/thread";
 import API from "../libs/api";
-import { useAppDispatch, useAppSelector } from "../stores/hooks";
+import { useAppDispatch } from "../stores/hooks";
 import { fetchThreads } from "../stores/slices/threads";
 import { useState } from "react";
 
-export default function ThreadCard(props: Thread) {
-    const isTrue = props.likes.some((val) => val.author.id === props.user);
+interface Data {
+    data: Thread;
+    userId: number;
+}
+export default function ThreadCard(props: Data) {
+    const isTrue = props.data.likes.some((val) => val.author.id === props.userId);
     const [isLiked, setIsLiked] = useState(isTrue);
-    const [likes, setLikes] = useState(props.likes.length);
+    const [likes, setLikes] = useState(props.data.likes.length);
     const navigate = useNavigate();
     const dispatch = useAppDispatch();
     const { like, unlike } = useThread();
@@ -48,10 +52,10 @@ export default function ThreadCard(props: Thread) {
             <Stack overflowY={"auto"}>
                 <Divider />
                 <Flex direction="row" py="2" gap="2">
-                    <Link onClick={() => navigate(`/${props.author.username}`)}>
+                    <Link onClick={() => navigate(`/${props.data.author.username}`)}>
                         <Avatar
                             size={"sm"}
-                            src={!props.author.picture ? "src/assets/default.jpg" : props.author.picture}
+                            src={!props.data.author.picture ? "src/assets/default.jpg" : props.data.author.picture}
                         />
                     </Link>
                     <Flex direction="column" ms={1}>
@@ -60,26 +64,26 @@ export default function ThreadCard(props: Thread) {
                                 display={"flex"}
                                 flexDirection={"row"}
                                 gap={2}
-                                onClick={() => navigate(`/${props.author.username}`)}>
+                                onClick={() => navigate(`/${props.data.author.username}`)}>
                                 <Text
                                     color={text.primary}
                                     fontWeight="semibold"
                                     textTransform={"capitalize"}
                                     textDecoration={"none"}>
-                                    {props.author.name}
+                                    {props.data.author.name}
                                 </Text>
-                                <Text color={text.secondary}>@{props.author.username}</Text>
+                                <Text color={text.secondary}>@{props.data.author.username}</Text>
                             </Link>
-                            <Text color={text.primary}>{getDistanceTime(props.created_at)}</Text>
-                            {!props.updated_at ? null : <Text color={text.secondary}>edited</Text>}
+                            <Text color={text.primary}>{getDistanceTime(props.data.created_at)}</Text>
+                            {!props.data.updated_at ? null : <Text color={text.secondary}>edited</Text>}
                         </Flex>
-                        <Box onClick={() => navigate(`/thread/${props.id}`)}>
+                        <Box onClick={() => navigate(`/thread/${props.data.id}`)}>
                             <Text color={text.primary} mb="2">
-                                {props.content}
+                                {props.data.content}
                             </Text>
-                            {!props.image ? null : (
+                            {!props.data.image ? null : (
                                 <Flex direction={"row"} overflow={"hidden"} borderRadius={"20px"} mb={3} gap={1}>
-                                    {props.image.map((img, index) => (
+                                    {props.data.image.map((img, index) => (
                                         <Box
                                             key={index}
                                             w={["8rem", "10rem", "15rem"]}
@@ -99,22 +103,26 @@ export default function ThreadCard(props: Thread) {
                                 mt={1}
                                 onClick={() => {
                                     !isLiked
-                                        ? (like(props.id), setLikes((prev) => prev + 1), setIsLiked((prev) => !prev))
-                                        : (unlike(props.id), setLikes((prev) => prev - 1), setIsLiked((prev) => !prev));
+                                        ? (like(props.data.id),
+                                          setLikes((prev) => prev + 1),
+                                          setIsLiked((prev) => !prev))
+                                        : (unlike(props.data.id),
+                                          setLikes((prev) => prev - 1),
+                                          setIsLiked((prev) => !prev));
                                 }}>
                                 {!isLiked ? <FaHeart /> : <FaHeart color="Red" />}
                             </Link>
                             <Text color={text.primary} me={3}>
                                 {likes}
                             </Text>
-                            <Link me={2} mt={1} onClick={() => navigate(`/thread/${props.id}`)}>
+                            <Link me={2} mt={1} onClick={() => navigate(`/thread/${props.data.id}`)}>
                                 <FaComment />
                             </Link>
-                            <Text color={text.primary}>{props.replies.length}</Text>
+                            <Text color={text.primary}>{props.data.replies!.length}</Text>
                         </Flex>
                     </Flex>
                     <Spacer />
-                    {props.author.id !== props.user ? null : (
+                    {props.data.author.id !== props.userId ? null : (
                         <Menu isLazy>
                             <MenuButton
                                 mt={-2}
@@ -127,10 +135,10 @@ export default function ThreadCard(props: Thread) {
                                 icon={<HiDotsHorizontal color={text.primary} />}
                             />
                             <MenuList bg={bg.secondary}>
-                                {/* <MenuItem>
-                                        Update
-                                    </MenuItem> */}
-                                <MenuItem bg={bg.secondary} _hover={{ bg: "#555" }} onClick={() => delThread(props.id)}>
+                                <MenuItem
+                                    bg={bg.secondary}
+                                    _hover={{ bg: "#555" }}
+                                    onClick={() => delThread(props.data.id)}>
                                     Delete
                                 </MenuItem>
                             </MenuList>
