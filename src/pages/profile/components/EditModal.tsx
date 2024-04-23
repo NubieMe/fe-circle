@@ -1,7 +1,7 @@
 import {
     Button,
     Checkbox,
-    Divider,
+    // Divider,
     Flex,
     FormControl,
     FormLabel,
@@ -124,7 +124,8 @@ export default function EditModal() {
                                     borderRadius={20}
                                     px={6}
                                     _hover={{ bg: "green.500" }}
-                                    onClick={() => updateUser()}>
+                                    onClick={() => updateUser()}
+                                >
                                     Save
                                 </Button>
                             </Flex>

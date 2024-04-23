@@ -1,11 +1,8 @@
-import { useSelector } from "react-redux";
 import API from "../libs/api";
-import { RootState } from "../stores/store";
 import { useDispatch } from "react-redux";
 import { GET_FOLLOW } from "../stores/slices/follow";
 
 export function useFollow() {
-    const user = useSelector((state: RootState) => state.user.id);
     const dispatch = useDispatch();
 
     async function follow(id: number) {
