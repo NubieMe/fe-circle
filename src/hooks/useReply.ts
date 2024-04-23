@@ -39,6 +39,7 @@ export function useReply() {
     }
 
     async function postReply(e: FormEvent<HTMLFormElement>, id: number) {
+        e.preventDefault();
         const promise = new Promise(async (res, rej) => {
             try {
                 const formData = new FormData();
