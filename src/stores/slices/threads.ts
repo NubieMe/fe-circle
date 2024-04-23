@@ -6,7 +6,7 @@ export const fetchThreads = createAsyncThunk<Thread[], void, { rejectValue: stri
     "thread/fetchThreads",
     async (_, thunkAPI) => {
         try {
-            const response = await API.get(`http://localhost:5000/api/v1/thread`);
+            const response = await API.get(`/thread`);
             return response.data;
         } catch (error) {
             if (error instanceof Error) {
