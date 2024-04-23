@@ -14,7 +14,10 @@ const RightSidebar = () => {
                 </Text>
                 <Text color={text.secondary} bg={bg.secondary} fontSize="12" display="flex" flexDirection="row">
                     Powered by
-                    <Image src="src/assets/dumbways.png" style={{ height: "12px", margin: "5px 5px 0px 5px" }} />
+                    <Image
+                        src="https://res.cloudinary.com/dydmnzkfh/image/upload/v1713885983/jeug4lzigy42tvcvb2nl.png"
+                        style={{ height: "12px", margin: "5px 5px 0px 5px" }}
+                    />
                     Dumbways.id #1 Coding Bootcamp
                 </Text>
             </Card>

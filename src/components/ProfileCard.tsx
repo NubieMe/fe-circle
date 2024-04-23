@@ -26,7 +26,8 @@ const ProfileCard = () => {
             mx={"auto"}
             mt={"20px"}
             direction="column"
-            color={"white"}>
+            color={"white"}
+        >
             <Text bg={"none"} textAlign={"left"} px={2} pb={2} fontWeight={600}>
                 My Profile
             </Text>
@@ -59,7 +60,8 @@ const ProfileCard = () => {
                         borderRadius={"40px"}
                         color={"white"}
                         _hover={{ bg: "#555" }}
-                        onClick={() => navigate(`/${userLogin.username}`)}>
+                        onClick={() => navigate(`/${userLogin.username}`)}
+                    >
                         Edit Profile
                     </Button>
                 </Box>
@@ -69,7 +71,8 @@ const ProfileCard = () => {
                     bg={"none"}
                     textAlign="left"
                     fontSize="xl"
-                    textTransform={"capitalize"}>
+                    textTransform={"capitalize"}
+                >
                     {userLogin.name}
                 </Text>
                 <Text color={text.secondary} bg={"none"} textAlign="left" fontSize="0.9rem" fontWeight="500">
