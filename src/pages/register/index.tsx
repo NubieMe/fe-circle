@@ -12,7 +12,7 @@ const Register = () => {
                 </Heading>
             </Link>
             <Text fontSize={25} mb={2}>
-                Create account Circle
+                Create Circle's account
             </Text>
             <FormRegister />
             <Text>
