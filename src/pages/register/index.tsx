@@ -17,7 +17,7 @@ const Register = () => {
             <FormRegister />
             <Text>
                 Already have account?{" "}
-                <Link to={"/login"} color={text.active}>
+                <Link to={"/login"} color={text.active} style={{ textDecoration: "underline" }}>
                     Login
                 </Link>
             </Text>
