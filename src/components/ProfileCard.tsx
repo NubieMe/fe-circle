@@ -32,7 +32,11 @@ const ProfileCard = () => {
                 My Profile
             </Text>
             <Image
-                src={!userLogin.cover ? "https://i.ibb.co/xmP2pS6/Profile.png" : userLogin.cover}
+                src={
+                    !userLogin.cover
+                        ? "https://res.cloudinary.com/dydmnzkfh/image/upload/v1715220637/hbduavxvhcmdgloyszer.png"
+                        : userLogin.cover
+                }
                 maxW="100%"
                 h={"7rem"}
                 objectFit={"cover"}

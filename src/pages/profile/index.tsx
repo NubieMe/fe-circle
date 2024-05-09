@@ -37,10 +37,15 @@ export default function Profile() {
                 mx={"auto"}
                 mt={"20px"}
                 direction="column"
-                color={"white"}>
+                color={"white"}
+            >
                 <Skeleton isLoaded={!user.isLoading} w="100%" h="140px" pos={"relative"} className="container">
                     <Image
-                        src={!user?.data.cover ? "https://i.ibb.co/xmP2pS6/Profile.png" : user.data.cover}
+                        src={
+                            !user?.data.cover
+                                ? "https://res.cloudinary.com/dydmnzkfh/image/upload/v1715220637/hbduavxvhcmdgloyszer.png"
+                                : user.data.cover
+                        }
                         w="100%"
                         h="100%"
                         opacity={1}
@@ -61,7 +66,8 @@ export default function Profile() {
                             pos={"absolute"}
                             _hover={{ cursor: "pointer" }}
                             onClick={() => dispatch(openCover(true))}
-                            zIndex={1}>
+                            zIndex={1}
+                        >
                             <Flex justifyContent={"center"} alignItems={"center"} mt={"1.3rem"}>
                                 <RiImageEditFill size={50} color="black" />
                             </Flex>
@@ -94,7 +100,8 @@ export default function Profile() {
                                 mt={"-30px"}
                                 onClick={() => dispatch(openPicture(true))}
                                 ms={"50px"}
-                                _hover={{ cursor: "pointer" }}>
+                                _hover={{ cursor: "pointer" }}
+                            >
                                 <Flex justifyContent={"center"} alignItems={"center"} pt={"5px"}>
                                     <RiImageEditFill size={20} color="black" />
                                 </Flex>
@@ -105,7 +112,8 @@ export default function Profile() {
                         ml={"auto"}
                         mt={{ base: "-5px", lg: "-2px", xl: "-20px" }}
                         height={{ lg: "25px", xl: "30px" }}
-                        bg={"none"}>
+                        bg={"none"}
+                    >
                         {userLogin.username !== username ? null : (
                             <Button
                                 w={{ lg: "90%", xl: "100%" }}
@@ -116,7 +124,8 @@ export default function Profile() {
                                 borderRadius={"40px"}
                                 color={"white"}
                                 onClick={() => dispatch(openEdit(true))}
-                                _hover={{ bg: "#555" }}>
+                                _hover={{ bg: "#555" }}
+                            >
                                 Edit Profile
                             </Button>
                         )}
@@ -131,7 +140,8 @@ export default function Profile() {
                             bg={"none"}
                             textAlign="left"
                             fontSize="xl"
-                            textTransform={"capitalize"}>
+                            textTransform={"capitalize"}
+                        >
                             {user?.data.name}
                         </Text>
                         <Text color={text.secondary} bg={"none"} textAlign="left" fontSize="0.9rem" fontWeight="500">
