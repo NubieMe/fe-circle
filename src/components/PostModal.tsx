@@ -14,15 +14,15 @@ import {
     ModalOverlay,
 } from "@chakra-ui/react";
 import { FaImage } from "react-icons/fa6";
-import { useDispatch, useSelector } from "react-redux";
 import { updateModal } from "../stores/slices/modal";
-import { RootState } from "../stores/store";
 import { usePost } from "../hooks/usePost";
 import { bg } from "../styles/style";
+import { useAppDispatch, useAppSelector } from "../stores/hooks";
 
 const PostModal = () => {
-    const modal = useSelector((state: RootState) => state.modal.open);
-    const dispatch = useDispatch();
+    const modal = useAppSelector((state) => state.modal.open);
+    const picture = useAppSelector((state) => state.user.picture);
+    const dispatch = useAppDispatch();
     const { postModal, handleModal } = usePost();
 
     return (
@@ -35,7 +35,7 @@ const PostModal = () => {
                     <form>
                         <Flex mb="3">
                             <Box>
-                                <Avatar src="/src/assets/default.jpg" />
+                                <Avatar src={picture ? picture : "/src/assets/default.jpg"} />
                             </Box>
                             <Input
                                 name="content"
@@ -69,7 +69,8 @@ const PostModal = () => {
                                 px={6}
                                 onClick={(e) => {
                                     postModal(e);
-                                }}>
+                                }}
+                            >
                                 Post
                             </Button>
                         </Flex>
