@@ -24,6 +24,7 @@ export default function FormLogin() {
                         name="username"
                         placeholder="Username/Email"
                         border={"1px solid #555"}
+                        autoComplete="off"
                     />
                     <Input
                         onChange={(e) => handleChange(e)}
@@ -31,6 +32,7 @@ export default function FormLogin() {
                         name="password"
                         placeholder="Password"
                         border={"1px solid #555"}
+                        autoComplete="off"
                     />
                 </Stack>
                 <Button
