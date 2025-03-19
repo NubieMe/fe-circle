@@ -20,15 +20,16 @@ export default function FormRegister() {
             )}
             <form onSubmit={(e) => register(e)}>
                 <Stack spacing={3} mb={3}>
-                    <Input onChange={handleChange} name="name" placeholder="Name*" border={"1px solid #555"} />
-                    <Input onChange={handleChange} name="username" placeholder="Username*" border={"1px solid #555"} />
-                    <Input onChange={handleChange} name="email" placeholder="Email*" border={"1px solid #555"} />
+                    <Input onChange={handleChange} name="name" placeholder="Name*" border={"1px solid #555"} autoComplete="off" />
+                    <Input onChange={handleChange} name="username" placeholder="Username*" border={"1px solid #555"} autoComplete="off" />
+                    <Input onChange={handleChange} name="email" placeholder="Email*" border={"1px solid #555"} autoComplete="off" />
                     <Input
                         onChange={handleChange}
                         name="password"
                         type="password"
                         placeholder="Password*"
                         border={"1px solid #555"}
+                        autoComplete="off"
                     />
                 </Stack>
                 <Button
