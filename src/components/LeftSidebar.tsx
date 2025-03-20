@@ -96,7 +96,9 @@ const LeftSidebar = () => {
                         <FaPencilAlt color={text.primary} size={22} />
                     </Text>
                 </Button>
-                <Box mt={{ base: 265, lg: 240, xl: 260 }}>
+            </Card>
+            <Card bgColor={bg.primary} mb={4}>
+                <Box>
                     <Link display="flex" gap="3" onClick={() => logout()}>
                         <Text fontSize={"2rem"} me={{ base: "100px", lg: 0 }}>
                             <TbLogout color={text.primary} size={30} />
