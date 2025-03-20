@@ -47,7 +47,7 @@ const LeftSidebar = () => {
     }
 
     return (
-        <Flex h={"100%"} w={"100%"} direction="column" ps={3} pe={4} pt={3} borderRight={"1px"}>
+        <Flex h={"100%"} w={"100%"} direction="column" ps={3} pe={4} pt={3} borderRight={"1px"} justifyContent={"space-between"}>
             <Card gap="5" bg={bg.primary} ms="1">
                 <HStack>
                     <Link onClick={() => navigate("/")}>
