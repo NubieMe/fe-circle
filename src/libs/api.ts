@@ -2,10 +2,11 @@ import axios from "axios";
 import Cookies from "js-cookie";
 
 const API = axios.create({
-    baseURL: "https://be-circle-production.up.railway.app/api/v1",
+    baseURL: "https://modern-honeybee-romantic.ngrok-free.app/",
     headers: {
         Accept: "application/json",
         Authorization: Cookies.get("C.id") ? "Bearer " + Cookies.get("C.id") : "",
+        "ngrok-skip-browser-warning": true,
     },
 });
 
